@@ -1,5 +1,6 @@
 from bot.database.main import engine, Base
 from .user import User
+from .channels import ObservingChannels
 
 
 async def register_models() -> None:
