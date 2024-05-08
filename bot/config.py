@@ -19,8 +19,13 @@ TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
 
 TELEGRAM_CLIENT = Client("client", api_id=TELEGRAM_API_ID, api_hash=TELEGRAM_API_HASH)
 
+REDIS_PORT = os.getenv('REDIS_PORT')
+
+REDIS_HOST = os.getenv('REDIS_HOST')
+
 
 class MessageText:
+    ADMIN_PANEL = 'Добро пожаловать @{username} в панели администратора!'
     ADD_CHANNEL = 'Отправьте приглашение на группу.'
     ADD_CHANNEL_SUCCESSFUL = 'Чат успешно добавлен!'
     SET_AUTO_ANSWER = 'Отправьте сообщение.'
