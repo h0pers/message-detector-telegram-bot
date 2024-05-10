@@ -10,7 +10,7 @@ from bot.fsm.admin import AdminStates
 notification_chat_callback_router = Router()
 
 
-@notification_chat_callback_router.callback_query(StateFilter(AdminStates.edit_chosen_channel),
+@notification_chat_callback_router.callback_query(StateFilter(None),
                                                   AdminPanelCallback.filter(F.EDIT_CHANNEL_NOTIFICATION_CHAT == 1))
 async def edit_notification_chat_handler(query: CallbackQuery, state: FSMContext):
     await query.message.answer(text=MessageText.SET_NOTIFICATION_CHAT)

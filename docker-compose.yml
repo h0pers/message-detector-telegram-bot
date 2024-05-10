@@ -19,6 +19,15 @@ services:
     restart: on-failure
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+  tg_client:
+    build: .
+    command: sh -c "python -m run_tg_client"
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - db
+      - redis
   bot:
     build: .
     command: sh -c "python -m run"
@@ -28,6 +37,7 @@ services:
     depends_on:
       - db
       - redis
+      - tg_client
 
 volumes:
   pgdata:

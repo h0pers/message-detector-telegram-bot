@@ -15,4 +15,3 @@ class AdminStates(StatesGroup):
     edit_blacklist = State()
     remove_blacklist_user = State()
     add_blacklist_user = State()
-    reply_to_triggered_message = State()

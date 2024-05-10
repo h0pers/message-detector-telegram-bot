@@ -1,21 +1,22 @@
-from aiogram import Router, F, Bot
+from aiogram import Router, Bot
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 from bot.config import MessageText
 from bot.database.main import SessionLocal
-from bot.database.methods.create import create
+from bot.database.methods.delete import delete
+from bot.database.methods.get import get
 from bot.database.models.channels import ObservingChannels
 from bot.filters.document_type import DocumentType
 from bot.fsm.admin import AdminStates
 
-add_chanel_router = Router()
+remove_channel_router = Router()
 
 
-@add_chanel_router.message(StateFilter(AdminStates.add_channel),
-                           DocumentType(['.txt']))
-async def add_channel_handler(message: Message, bot: Bot, state: FSMContext):
+@remove_channel_router.message(StateFilter(AdminStates.remove_channel),
+                               DocumentType(['.txt']))
+async def remove_channel_handler(message: Message, bot: Bot, state: FSMContext):
     file_binary = await bot.download(message.document)
 
     with file_binary as file:
@@ -25,10 +26,9 @@ async def add_channel_handler(message: Message, bot: Bot, state: FSMContext):
     async with SessionLocal.begin() as session:
         for link in links:
             try:
-                await create(session, ObservingChannels, values={'invite_link': link})
+                await delete(session, ObservingChannels, invite_link=link)
+            except:
+                await message.answer(text=MessageText.REMOVE_CHANNEL_ERROR.format(link=link))
 
-            except Exception as ex:
-                await message.answer(text=MessageText.ADD_CHANNEL_ERROR.format(link=link))
-
-    await message.answer(text=MessageText.ADD_CHANNEL_SUCCESSFUL)
+    await message.answer(text=MessageText.REMOVE_CHANNEL_SUCCESSFUL)
     await state.clear()
